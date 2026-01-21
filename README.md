@@ -10,4 +10,4 @@ For all things algorithms!
 
 
 #### Avatar:
-<img width="420" height="420" alt="image" src="https://github.com/user-attachments/assets/eb1d40b6-68c2-4fc1-b38d-cb00b315b471" />
+<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/eb1d40b6-68c2-4fc1-b38d-cb00b315b471" />
