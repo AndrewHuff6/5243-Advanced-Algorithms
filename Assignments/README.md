@@ -2,4 +2,4 @@
 
 |  #  | Folder Link | Assignment Description |
 | :-: | ----------- | ---------------------- |
-|  0  | link 0      | description 0          |
+|  1  | Assignments/P01 | BST Delete Implementation |
