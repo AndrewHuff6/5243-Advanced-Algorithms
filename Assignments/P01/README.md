@@ -2,6 +2,7 @@ In my bst.cpp file, I handled the three cases mentioned in the readme file. Thos
   - Deleting a leaf node
   - Deleting a node with one child
   - Deleting a node with two children
+    
 Before I started to code, I also drew example pictures just to jog my memory on how BSTs work overall.
 Then, I looked at the entire BST class to determine it's general structure. Lastly, I took the liberty
 to draw out some examples as well as watch a couple youtube videos to help vizualize operations.
