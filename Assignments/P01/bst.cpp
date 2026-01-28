@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -99,54 +100,55 @@ class Bst {
     void _delete(Node *&subroot, int x) {
         // If the node doesn't exist
         if (!subroot) {
-            return -1; // Indicates the node is not found
+            cout<< "Tree cannot delete because it is empty." << endl; // Indicates the node is not found
+            return;
         }
         // Search the left first
         if (x < subroot->data) {
             _delete(subroot->left, x);
         }
         // Or the right
-        else if (x > subroot->data ){
-            _delete(subroot->left, x);
+        else if (x > subroot->data ) {
+            _delete(subroot->right, x);
         }
         else {
-            // Creating a temporary node to be used
-            Node *temp = subroot;
             // Case 1 - deleting node without children
             // If there aren't any subroots to the node
-            if (!subroot->left) {
-                if (!subroot->right) {
-                    // delete it and set to null
-                    delete subroot, subroot = nullptr;
-                }
+            if (!subroot->left && !subroot->right) {
+                // delete it and set to null
+                delete subroot, subroot = nullptr;
             }
             // Case 2 - deleting node with one child
-            // If there exists either a left or right subroot
-            if (subroot->left) {
+            // If there exists a right subroot
+            else if (!subroot->left && subroot->right) {
+                // Creating a temporary node to be used
+                Node *temp = subroot;
                 // Set the subroot equal to the left subroot
-                subroot = subroot->left;
-                // Delete the temporary variable after use
-                delete temp;
-            }
-            else if {
-                // Set the subroot equal to the right subroot
                 subroot = subroot->right;
                 // Delete the temporary variable after use
                 delete temp;
             }
+            // If there exists a left subroot
+            else if (subroot->left && !subroot->right){
+                // Creating a temporary node to be used
+                Node *temp = subroot;
+                // Set the subroot equal to the right subroot
+                subroot = subroot->left;
+                // Delete the temporary variable after use
+                delete temp;
+            }
             else {
-                break;
+                // Case three - deleting node with two children, inorder predecessor
+                Node *pred = subroot->left; // predecessor is the nearest left value
+                // Search for the greatest value to the left
+                while (pred->right) {
+                    pred = pred->right;
+                }
+                // Set the pred data to the subroot data
+                subroot->data = pred->data;
+                // Delete the pred node
+                _delete(subroot->left, pred->data);
             }
-            // Case three - deleting node with two children, inorder predecessor
-            Node *pred = subroot->left; // predecessor is the nearest left value
-            // Search for the greatest value to the left
-            while (pred->right) {
-                pred = pred->right;
-            }
-            // Set the pred data to the subroot data
-            subroot->data = pred->data;
-            // Delete the pred node
-            _delete(subroot->left, pred->data);
         }        
     }
     int _ipl(Node *root, int depth = 0) {
@@ -158,7 +160,7 @@ class Bst {
 public:
     Bst() { root = nullptr; }
     void insert(int x) { _insert(root, x); }
-    void deletion(int x) { _delete(root, x)}     // inline to match the others
+    void deletion(int x) { _delete(root, x); }     // inline to match the others
     bool search(int key) { return 0; }
     void print() { _print(root); }
     void saveDotFile(const std::string &filename) {
@@ -228,4 +230,95 @@ int main() {
     tree2.insert(7);
     tree2.insert(20);
     cout << "Internal Path Length: " << tree2.ipl() << endl;
+
+    cout <<"--------------------------------------------" << endl;
+
+    // Prints the original BST
+    cout << "Original tree: ";
+    tree2.print();
+    cout << endl;
+
+    // Case 1 test
+    tree2.deletion(2);  // Delete leaf node
+    cout << "Deleting 2 (leaf): ";
+    tree2.print();
+    cout << endl;
+
+    // Case 2 test
+    tree2.deletion(15);  // Delete node with only right child
+    cout << "Deleting 15 (one child): ";
+    tree2.print();
+    cout << endl;
+
+    // Case 3 test
+    tree2.deletion(5);  // Delete node with two children
+    cout << "Deleting 5 (two children): ";
+    tree2.print();
+    cout << endl;
+
+    // Case 4 test
+    tree2.deletion(10);
+    cout << "Deleting 10 (root): ";
+    tree2.print();
+    cout << endl;
+    
+    cout <<"--------------------------------------------" << endl;
+
+    // Empty tree test
+    // Should print the "cannot delete" message 
+    Bst tree4;
+    tree4.print();
+    tree4.deletion(1); 
+
+    cout <<"--------------------------------------------" << endl;
+
+    // Tree with one node test
+    // Should not return anything. Will be stored, but then deleted before it's printed
+    Bst tree5;
+    tree5.insert(100);
+    tree5.deletion(100); 
+    tree5.print();
+    cout << "NOTE: This is supposed to return nothing!" << endl;
+    cout << "Inserting one element, deleting that element!" << endl;
+    cout << endl;
+
+    cout <<"--------------------------------------------" << endl;
+
+    // Sequential (Linked-List) test
+    Bst tree6;
+    tree6.insert(1);
+    tree6.insert(2);
+    tree6.insert(3);
+    tree6.insert(4);
+    tree6.insert(5);
+    tree6.insert(6);
+
+    // Prints the original BST
+    cout << "Original tree: ";
+    tree6.print();
+    cout << endl;
+
+    // Case 1 test
+    tree6.deletion(1);  // Delete leaf node
+    cout << "Deleting 1 (leaf): ";
+    tree6.print();
+    cout << endl;
+
+    // Case 2 test
+    tree6.deletion(5);  // Delete node with only right child
+    cout << "Deleting 5 (one child): ";
+    tree6.print();
+    cout << endl;
+
+    // Case 3 test
+    tree6.deletion(2);  // Delete node with two children
+    cout << "Deleting 2 (two children): ";
+    tree6.print();
+    cout << endl;
+
+    // Case 4 test
+    tree6.deletion(4);
+    cout << "Deleting 4 (root): ";
+    tree6.print();
+    cout << endl;
 }
