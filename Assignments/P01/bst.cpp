@@ -1,3 +1,4 @@
+// Altered bst.cpp file - Andrew Huff
 #include <fstream>
 #include <iostream>
 #include <string>
