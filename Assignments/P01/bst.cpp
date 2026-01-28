@@ -85,6 +85,70 @@ class Bst {
             }
         }
     }
+    /* 
+    Implemented delete method
+    When choosing a replacement value after 
+    deleting an inner node with two children,
+    consider using Inorder Predecessor (largest)
+    value in the left subtree)
+    Three cases: 
+     1. Deleting a leaf node without children
+     2. Deleting a node with only one child
+     3. Deleting a node with two children
+    */
+    void _delete(Node *&subroot, int x) {
+        // If the node doesn't exist
+        if (!subroot) {
+            return -1; // Indicates the node is not found
+        }
+        // Search the left first
+        if (x < subroot->data) {
+            _delete(subroot->left, x);
+        }
+        // Or the right
+        else if (x > subroot->data ){
+            _delete(subroot->left, x);
+        }
+        else {
+            // Creating a temporary node to be used
+            Node *temp = subroot;
+            // Case 1 - deleting node without children
+            // If there aren't any subroots to the node
+            if (!subroot->left) {
+                if (!subroot->right) {
+                    // delete it and set to null
+                    delete subroot, subroot = nullptr;
+                }
+            }
+            // Case 2 - deleting node with one child
+            // If there exists either a left or right subroot
+            if (subroot->left) {
+                // Set the subroot equal to the left subroot
+                subroot = subroot->left;
+                // Delete the temporary variable after use
+                delete temp;
+            }
+            else if {
+                // Set the subroot equal to the right subroot
+                subroot = subroot->right;
+                // Delete the temporary variable after use
+                delete temp;
+            }
+            else {
+                break;
+            }
+            // Case three - deleting node with two children, inorder predecessor
+            Node *pred = subroot->left; // predecessor is the nearest left value
+            // Search for the greatest value to the left
+            while (pred->right) {
+                pred = pred->right;
+            }
+            // Set the pred data to the subroot data
+            subroot->data = pred->data;
+            // Delete the pred node
+            _delete(subroot->left, pred->data);
+        }        
+    }
     int _ipl(Node *root, int depth = 0) {
         if (!root)
             return 0; // Base case: Empty subtree contributes 0 to IPL
@@ -94,6 +158,7 @@ class Bst {
 public:
     Bst() { root = nullptr; }
     void insert(int x) { _insert(root, x); }
+    void deletion(int x) { _delete(root, x)}     // inline to match the others
     bool search(int key) { return 0; }
     void print() { _print(root); }
     void saveDotFile(const std::string &filename) {
