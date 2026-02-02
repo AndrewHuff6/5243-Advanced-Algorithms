@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <cmath>
+#include <cmath>    // added cmath for prior code to run
 
 using namespace std;
 
