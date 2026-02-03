@@ -1,4 +1,4 @@
-In my bst.cpp file, I handled the three cases mentioned in the readme file. Those were:
+In my bst.cpp file, I handled the three cases mentioned in the assignments readme file. Those were:
   - Deleting a leaf node
   - Deleting a node with one child
   - Deleting a node with two children
