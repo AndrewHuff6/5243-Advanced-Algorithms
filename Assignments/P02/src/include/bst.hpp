@@ -8,21 +8,7 @@
 
 using json = nlohmann::json;
 
-
 using namespace std;
-
-// struct Counters {
-//     long long comparisons = 0;
-//     long long structural_ops = 0;
-//     long long inserts = 0;
-//     long long deletes = 0;
-//     long long lookups = 0;
-//     long long resize_events = 0;
-
-//     ostream& operator <<(ostream& os, const Counter &o){
-//         return os << o.comparisons<<" "<<o.structural_ops<<" "<<o.inserts<<std::endl;
-//     }
-// };
 
 class Bst
 {
@@ -47,15 +33,15 @@ protected:
         c.comparisons++;
         if (!node)
         {
-            c.structural_ops++;
             node = new Node(value);
+            c.structural_ops++;
+            c.shifts_relinks++;
             return true;
         }
 
         c.comparisons++;
         if (value < node->data)
         {
-
             return insert(node->left, value);
         }
         
@@ -73,23 +59,21 @@ protected:
     bool contains(Node *node, int value) const
     {
 
-        // comparison+
-        if (!node)
+        c.comparisons++;
+        if (!node)    // if node is null
         {
-
             return false;
         }
 
-        // comparison++
-        if (value == node->data)
+        c.comparisons++;
+        if (value == node->data)  // if the value is equal to node value
         {
-
             return true;
         }
-        // comparison++
-        if (value < node->data)
+        
+        c.comparisons++;
+        if (value < node->data)    // if the value is less than node value
         {
-
             return contains(node->left, value);
         }
 
@@ -102,7 +86,7 @@ protected:
         // lookup++
         while (node && node->left)
         {
-            // comparison++
+            c.comparisons++;
             node = node->left;
         }
         return node;
@@ -112,33 +96,33 @@ protected:
     bool erase(Node *&node, int value)
     {
 
-        // comparison++
-        if (!node)
+        c.comparisons++;
+        if (!node)    // if node is null
         {
             return false;
         }
 
-        // comparison++
-        if (value < node->data)
+        c.comparisons++;
+        if (value < node->data)    // if value is less than node value
         {
             return erase(node->left, value);
         }
 
-        // comparison++
-        if (value > node->data)
+        c.comparisons++;
+        if (value > node->data)    // if value is greater than node value
         {
             return erase(node->right, value);
         }
 
         // Found node to delete
-
+        c.structural_ops++;
+        
         // Case 1: leaf node
         if (!node->left && !node->right)
         {
-            //
-            // structural_ops++
             delete node;
             node = nullptr;
+            c.structural_ops++;
             return true;
         }
 
@@ -147,8 +131,8 @@ protected:
         {
             Node *temp = node;
             node = node->right;
-            // structural_ops++
             delete temp;
+            c.structural_ops++;
             return true;
         }
 
@@ -157,21 +141,22 @@ protected:
         {
             Node *temp = node;
             node = node->left;
-            // structural_ops++
             delete temp;
+            c.structural_ops++;
             return true;
         }
 
         // Case 4: two children
         Node *successor = findMin(node->right);
         node->data = successor->data;
+        c.structural_ops++;
         return erase(node->right, successor->data);
     }
 
     // Postorder cleanup helper
     void clear(Node *node)
     {
-        // compare++
+        c.comparisons++
         if (!node)
         {
             return;
@@ -179,7 +164,7 @@ protected:
 
         clear(node->left);
         clear(node->right);
-        // structural_ops++
+        c.structural_ops++;
         delete node;
     }
 
@@ -217,12 +202,19 @@ public:
         for (auto &element : j)
         {
             std::cout << element << '\n';
+            int value = element[1];
+            // printing
+            if (op == "insert")
+                insert(value);
+            else if (op == "contains")
+                contains(value);
+            else if (op == "delete")
+                erase(value);
         }
     }
 
     bool insert(int value)
     {
-        // insert++
         c.inserts++;
         return insert(root, value);
         
@@ -230,13 +222,13 @@ public:
 
     bool contains(int value) const
     {
-        // lookup++
+        c.lookups++
         return contains(root, value);
     }
 
     bool erase(int value)
     {
-        // delete++
+        c.deletes++
         return erase(root, value);
     }
 
