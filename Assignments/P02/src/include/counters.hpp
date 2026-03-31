@@ -18,6 +18,7 @@ struct Counters {
     long long deletes = 0;
     long long lookups = 0;
     long long resize_events = 0;
+    long long shifts_relinks = 0;
 
     friend std::ostream& operator<<(std::ostream& os, const Counters &o){
         return os << "Comp:" << o.comparisons
@@ -35,8 +36,10 @@ struct Counters {
             j["deletes"] = deletes;
             j["lookups"] = lookups;
             j["resize_events"] = resize_events;
+            j["shifts_relinks"] = shifts_relinks;
+
         }else{
-            j = {comparisons,structural_ops,inserts,deletes, lookups,resize_events};
+            j = {comparisons,structural_ops,inserts,deletes, lookups,resize_events, shifts_relinks};
         }
 
         std::ofstream file(filename);
