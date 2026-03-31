@@ -174,9 +174,18 @@ public:
 
     }
 
+    // Reset the entire run
     void reset(){
+         clear(root);
+         root = nullptr;
          c = {}; 
     }
+
+    // Resets the counters, set to empty
+    void resetCounters(){
+         c = {}; 
+    }
+
     void save(string filename,bool dict=true){
         c.saveCounters(filename,dict);
     }
