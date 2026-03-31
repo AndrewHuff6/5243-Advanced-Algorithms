@@ -83,7 +83,7 @@ protected:
     // Find smallest node in subtree
     Node *findMin(Node *node) const
     {
-        // lookup++
+        c.lookups++;
         while (node && node->left)
         {
             c.comparisons++;
@@ -95,7 +95,6 @@ protected:
     // Recursive erase helper
     bool erase(Node *&node, int value)
     {
-
         c.comparisons++;
         if (!node)    // if node is null
         {
@@ -210,9 +209,9 @@ public:
         // replace the print with actual operations, to process entire file.
         for (auto &element : j)
         {
-            std::cout << element << '\n';
-            int value = element[1];
-            // printing
+            string op = element["op"];
+            int value = element["value"];
+ 
             if (op == "insert")
                 insert(value);
             else if (op == "contains")
