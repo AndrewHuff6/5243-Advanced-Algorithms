@@ -7,7 +7,6 @@
 #include <string>
 
 using json = nlohmann::json;
-
 using namespace std;
 
 class Bst
@@ -25,7 +24,7 @@ protected:
     };
 
     Node *root;
-    Counters c{};
+    mutable Counters c{};  // mutable so const methods can increment counters
 
     // Recursive insert helper
     bool insert(Node *&node, int value)
@@ -41,41 +40,29 @@ protected:
 
         c.comparisons++;
         if (value < node->data)
-        {
             return insert(node->left, value);
-        }
-        
+
         c.comparisons++;
         if (value > node->data)
-        {
             return insert(node->right, value);
-        }
 
-        // duplicate value: do nothing
-        return false;
+        return false; // duplicate
     }
 
     // Recursive search helper
     bool contains(Node *node, int value) const
     {
-
         c.comparisons++;
-        if (!node)    // if node is null
-        {
+        if (!node)
             return false;
-        }
 
         c.comparisons++;
-        if (value == node->data)  // if the value is equal to node value
-        {
+        if (value == node->data)
             return true;
-        }
-        
+
         c.comparisons++;
-        if (value < node->data)    // if the value is less than node value
-        {
+        if (value < node->data)
             return contains(node->left, value);
-        }
 
         return contains(node->right, value);
     }
@@ -83,7 +70,6 @@ protected:
     // Find smallest node in subtree
     Node *findMin(Node *node) const
     {
-        c.lookups++;
         while (node && node->left)
         {
             c.comparisons++;
@@ -96,122 +82,94 @@ protected:
     bool erase(Node *&node, int value)
     {
         c.comparisons++;
-        if (!node)    // if node is null
-        {
+        if (!node)
             return false;
-        }
 
         c.comparisons++;
-        if (value < node->data)    // if value is less than node value
-        {
+        if (value < node->data)
             return erase(node->left, value);
-        }
 
         c.comparisons++;
-        if (value > node->data)    // if value is greater than node value
-        {
+        if (value > node->data)
             return erase(node->right, value);
-        }
 
-        // Found node to delete
+        // Found the node to delete
         c.structural_ops++;
-        
-        // Case 1: leaf node
+
         if (!node->left && !node->right)
         {
             delete node;
             node = nullptr;
-            c.structural_ops++;
+            c.shifts_relinks++;
             return true;
         }
 
-        // Case 2: only right child
         if (!node->left)
         {
             Node *temp = node;
             node = node->right;
             delete temp;
-            c.structural_ops++;
+            c.shifts_relinks++;
             return true;
         }
 
-        // Case 3: only left child
         if (!node->right)
         {
             Node *temp = node;
             node = node->left;
             delete temp;
-            c.structural_ops++;
+            c.shifts_relinks++;
             return true;
         }
 
-        // Case 4: two children
+        // Two children: replace with in-order successor
         Node *successor = findMin(node->right);
         node->data = successor->data;
-        c.structural_ops++;
+        c.shifts_relinks++;
         return erase(node->right, successor->data);
     }
 
-    // Postorder cleanup helper
+    // Postorder cleanup
     void clear(Node *node)
     {
-        c.comparisons++
         if (!node)
-        {
             return;
-        }
-
         clear(node->left);
         clear(node->right);
-        c.structural_ops++;
         delete node;
     }
 
 public:
-    Bst() : root(nullptr)
-    {
+    Bst() : root(nullptr) {}
 
-    }
+    void resetCounters() { c = {}; }
 
-    // Reset the entire run
-    void reset(){
-         clear(root);
-         root = nullptr;
-         c = {}; 
-    }
-
-    // Resets the counters, set to empty
-    void resetCounters(){
-         c = {}; 
-    }
-
-    void save(string filename,bool dict=true){
-        c.saveCounters(filename,dict);
-    }
-
-    virtual ~Bst()
+    void reset()
     {
         clear(root);
+        root = nullptr;
+        c = {};
     }
 
-    Counters getCounters(){
-        return c;
-    }
-
-    // example to read in json file and process it
-    void runJobFile(std::string fname)
+    void save(string filename, bool dict = true)
     {
-        std::ifstream f(fname);
-        json j = json::parse(f);
-        // std::cout<<j<<std::endl;
+        c.saveCounters(filename, dict);
+    }
 
-        // iterate over json object and print out each operation with value
-        // replace the print with actual operations, to process entire file.
+    virtual ~Bst() { clear(root); }
+
+    Counters getCounters() { return c; }
+
+    void runJobFile(string fname)
+    {
+        ifstream f(fname);
+        json j = json::parse(f);
+
         for (auto &element : j)
         {
-            string op = element["op"];
-            int value = element["value"];
- 
+            string op    = element["op"];
+            int    value = element["value"];
+
             if (op == "insert")
                 insert(value);
             else if (op == "contains")
@@ -225,23 +183,19 @@ public:
     {
         c.inserts++;
         return insert(root, value);
-        
     }
 
     bool contains(int value) const
     {
-        c.lookups++
+        c.lookups++;
         return contains(root, value);
     }
 
     bool erase(int value)
     {
-        c.deletes++
+        c.deletes++;
         return erase(root, value);
     }
 
-    virtual const char *name() const
-    {
-        return "BST";
-    }
+    virtual const char *name() const { return "BST"; }
 };
