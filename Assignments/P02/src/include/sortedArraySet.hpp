@@ -163,9 +163,9 @@ public:
         json j = json::parse(f);
  
         for (auto &element : j) {
-            string op    = element[0];
-            int    value = element[1];
-            // printing
+            string op = element["op"];
+            int value = element["value"];
+ 
             if (op == "insert")
                 insert(value);
             else if (op == "contains")
