@@ -6,6 +6,7 @@ mkdir -p workLoads
 # Compile the workload generator (run from inside src/)
 g++ -std=c++20 -Iinclude workload_generator.cpp -o workload_generator
 
+# Begin file generation
 echo "Generating workload files..."
 
 for WORKLOAD in A B C D; do
@@ -16,4 +17,5 @@ for WORKLOAD in A B C D; do
     done
 done
 
-echo "Done! All 16 workload files created in workLoads/"
+# Printing the completion message
+echo "All 16 workload files created in workLoads/"
