@@ -8,7 +8,7 @@ The line that surprised me the most was line 30 in the results.csv file. The bin
 
 structure,workload,size,comparisons,structural_ops,inserts,deletes,lookups,resize_events,shifts_relinks
 
-# Command Timeline
+## Command Timeline
 
 In order to run this project, these were the commands I used to compile and execute.
 1. g++ -std=c++20 -Iinclude workload_generator.cpp -o workload_generator
@@ -17,7 +17,7 @@ In order to run this project, these were the commands I used to compile and exec
 4. g++ -std=c++20 -Iinclude main.cpp -o experiment
 5. ./experiment
 
-# Notes
+## Notes
 
 If you look closely, you will notice in step 2 that I misspelt "workloads" and spelt it as "workoads". Just wanted to point out the typo as it corresponds to the created executable in the source directory. I have also inserted the common tradeoffs table here as reference.
 
