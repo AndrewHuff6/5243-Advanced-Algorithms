@@ -4,7 +4,9 @@ This project was definitely fun in seeing which operations did best given certai
 I learned that the stats were pretty accurate with the "common tradeoffs" section of the readme provided. However, 
 I've noticed that my workLoads files were all about 8 times greater than N, with some of them being even larger. 
 
-The line that surprised me the most was line 30 in the results.csv file. The binary search tree with 20,000 elements had over one trillion comparisons in total. This could be a valid total due to each systematic comparison depending on both the size of the tree as well as the value being inserted. For the most part, it seemed that the sorted array did the worst in each category. This makes sense, especially when keeping track of the relink shifts. 
+The line that surprised me the most was line 30 in the results.csv file. The binary search tree with 20,000 elements had over one trillion comparisons in total. This could be a valid total due to each systematic comparison depending on both the size of the tree as well as the value being inserted. For the most part, it seemed that the sorted array did the worst in each category. This makes sense, especially when keeping track of the relink shifts. The results in the results.csv are structured as follows:
+
+
 
 | Structure      | Insert | Lookup | Delete | Hidden Cost         |
 | -------------- | ------ | ------ | ------ | ------------------- |
@@ -21,4 +23,4 @@ In order to run this project, these were the commands I used to compile and exec
 4. g++ -std=c++20 -Iinclude main.cpp -o experiment
 5. ./experiment
 
-If you look closely, you will notice in step 2 that I misspelt "workloads" and spelt it as "workoads". Just wanted to point out the typo as it corresponds to the created executable in the src directory.
+If you look closely, you will notice in step 2 that I misspelt "workloads" and spelt it as "workoads". Just wanted to point out the typo as it corresponds to the created executable in the source directory.
