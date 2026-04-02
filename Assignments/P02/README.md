@@ -19,7 +19,7 @@ In order to run this project, these were the commands I used to compile and exec
 
 ## Notes
 
-If you look closely, you will notice in step 2 that I misspelt "workloads" and spelt it as "workoads". Just wanted to point out the typo as it corresponds to the created executable in the source directory. I have also inserted the common tradeoffs table here as reference.
+If you look closely, you will notice in step 2 of the command timeline that I misspelt "workloads" and spelt it as "workoads". Just wanted to point out the typo as it corresponds to the created executable in the source directory. I have also inserted the common tradeoffs table here as reference.
 
 | Structure      | Insert | Lookup | Delete | Hidden Cost         |
 | -------------- | ------ | ------ | ------ | ------------------- |
