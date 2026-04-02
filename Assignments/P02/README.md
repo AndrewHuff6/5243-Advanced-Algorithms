@@ -6,7 +6,7 @@ I've noticed that my workLoads files were all about 8 times greater than N, with
 
 The line that surprised me the most was line 30 in the results.csv file. The binary search tree with 20,000 elements had over one trillion comparisons in total. This could be a valid total due to each systematic comparison depending on both the size of the tree as well as the value being inserted. For the most part, it seemed that the sorted array did the worst in each category. This makes sense, especially when keeping track of the relink shifts. The results in the results.csv are structured as follows:
 
-structure,workload,size,comparisons,structural_ops,inserts,deletes,lookups,resize_events,shifts_relinks
+Structure, Workload, Size, Comparisons, Structural_ops, Inserts, Deletes, Lookups, Resize_events, Shifts_relinks
 
 ## Command Timeline
 
